@@ -7,7 +7,18 @@ git clone https://github.com/justudin/docker-hadoop/docker-hadoop
 cd docker-hadoop
 docker-compose up -d
 ```
-Then follow the steps:
+
+Then access the web UIs at:
+
+| UI                     | URL                                              |
+| ---------------------- | ------------------------------------------------ |
+| NameNode (HDFS)        | [http://localhost:9870](http://localhost:9870)   |
+| ResourceManager (YARN) | [http://localhost:8088](http://localhost:8088)   |
+| NodeManager            | [http://localhost:8042](http://localhost:8042)   |
+| JobHistory             | [http://localhost:8188](http://localhost:8188) |
+
+
+Then follow the following steps:
 
 ```bash
 docker exec -it namenode bash
