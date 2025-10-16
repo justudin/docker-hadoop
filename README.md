@@ -3,7 +3,7 @@
 If you want a **pseudo-distributed cluster**, you can use the prebuilt setup:
 
 ```bash
-git clone https://github.com/justudin/docker-hadoop/docker-hadoop
+git clone https://github.com/justudin/docker-hadoop
 cd docker-hadoop
 docker-compose up -d
 ```
