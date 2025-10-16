@@ -1,4 +1,4 @@
-## 🧭 Use Docker Compose (multi-service cluster)
+## 🧭 1. Use Docker Compose (multi-service cluster)
 
 If you want a **pseudo-distributed cluster**, you can use the prebuilt setup:
 
@@ -24,7 +24,7 @@ Then follow the following steps:
 docker exec -it namenode bash
 ```
 
-## 📁 4. Prepare Input Data
+## 📁 2. Prepare Input Data
 
 Create a local text file, e.g. `input.txt`:
 
@@ -47,7 +47,7 @@ hdfs dfs -ls /input
 
 ---
 
-## 🧠 5. Run the WordCount Example
+## 🧠 3. Run the WordCount Example
 
 Run the example JAR provided by Hadoop:
 
@@ -57,7 +57,7 @@ hadoop jar /opt/hadoop-3.2.1/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.
 
 ---
 
-## 📤 6. Check the Output
+## 📤 4. Check the Output
 
 Once the job finishes:
 
