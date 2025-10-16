@@ -1,63 +1,68 @@
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/big-data-europe/Lobby)
+## 🧭 Use Docker Compose (multi-service cluster)
 
-# Changes
+If you want a **pseudo-distributed cluster**, you can use the prebuilt setup:
 
-Version 2.0.0 introduces uses wait_for_it script for the cluster startup
-
-# Hadoop Docker
-
-## Supported Hadoop Versions
-See repository branches for supported hadoop versions
-
-## Quick Start
-
-To deploy an example HDFS cluster, run:
+```bash
+git clone https://github.com/justudin/docker-hadoop/docker-hadoop
+cd docker-hadoop
+docker-compose up -d
 ```
-  docker-compose up
+Then follow the steps:
+
+```bash
+docker exec -it namenode bash
 ```
 
-Run example wordcount job:
-```
-  make wordcount
+## 📁 4. Prepare Input Data
+
+Create a local text file, e.g. `input.txt`:
+
+```bash
+echo "Hadoop is fast Hadoop is scalable Hadoop is reliable" > input.txt
 ```
 
-Or deploy in swarm:
-```
-docker stack deploy -c docker-compose-v3.yml hadoop
-```
+Now upload it to HDFS:
 
-`docker-compose` creates a docker network that can be found by running `docker network list`, e.g. `dockerhadoop_default`.
-
-Run `docker network inspect` on the network (e.g. `dockerhadoop_default`) to find the IP the hadoop interfaces are published on. Access these interfaces with the following URLs:
-
-* Namenode: http://<dockerhadoop_IP_address>:9870/dfshealth.html#tab-overview
-* History server: http://<dockerhadoop_IP_address>:8188/applicationhistory
-* Datanode: http://<dockerhadoop_IP_address>:9864/
-* Nodemanager: http://<dockerhadoop_IP_address>:8042/node
-* Resource manager: http://<dockerhadoop_IP_address>:8088/
-
-## Configure Environment Variables
-
-The configuration parameters can be specified in the hadoop.env file or as environmental variables for specific services (e.g. namenode, datanode etc.):
-```
-  CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+```bash
+hdfs dfs -mkdir -p /input
+hdfs dfs -put input.txt /input/
 ```
 
-CORE_CONF corresponds to core-site.xml. fs_defaultFS=hdfs://namenode:8020 will be transformed into:
-```
-  <property><name>fs.defaultFS</name><value>hdfs://namenode:8020</value></property>
-```
-To define dash inside a configuration parameter, use triple underscore, such as YARN_CONF_yarn_log___aggregation___enable=true (yarn-site.xml):
-```
-  <property><name>yarn.log-aggregation-enable</name><value>true</value></property>
+Verify:
+
+```bash
+hdfs dfs -ls /input
 ```
 
-The available configurations are:
-* /etc/hadoop/core-site.xml CORE_CONF
-* /etc/hadoop/hdfs-site.xml HDFS_CONF
-* /etc/hadoop/yarn-site.xml YARN_CONF
-* /etc/hadoop/httpfs-site.xml HTTPFS_CONF
-* /etc/hadoop/kms-site.xml KMS_CONF
-* /etc/hadoop/mapred-site.xml  MAPRED_CONF
+---
 
-If you need to extend some other configuration file, refer to base/entrypoint.sh bash script.
+## 🧠 5. Run the WordCount Example
+
+Run the example JAR provided by Hadoop:
+
+```bash
+hadoop jar /opt/hadoop-3.2.1/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar wordcount /input /output
+```
+
+---
+
+## 📤 6. Check the Output
+
+Once the job finishes:
+
+```bash
+hdfs dfs -ls /output
+hdfs dfs -cat /output/part-r-00000
+```
+
+Expected output:
+
+```
+Hadoop 3
+fast    1
+is      3
+reliable 1
+scalable 1
+```
+
+---
